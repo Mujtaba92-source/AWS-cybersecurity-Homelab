@@ -1,6 +1,11 @@
 # AWS-cybersecurity-Homelab
 
 Project: Deploying Security Onion on AWS for SOC Learning
+![Screenshot 2025-02-06 at 5 09 22 PM](https://github.com/user-attachments/assets/e6a6c2c0-1da0-4d19-9a35-8e0134bc2931)
+
+
+
+
 
 Objective:
 This project demonstrates a Proof of Concept (PoC) for deploying Security Onion on AWS to gain hands-on experience in building a Security Operations Center (SOC) environment. Security Onion is an open-source Linux distribution designed for intrusion detection, network security monitoring, and log management.
