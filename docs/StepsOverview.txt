@@ -1,0 +1,155 @@
+Step-by-Step Guide to Setting Up a SOC and Honeynet in AWS
+
+1. Setting Up a VPC and Public Subnet
+
+Create a VPC with an appropriate CIDR block (e.g., 10.100.0.0/16).
+
+Create a public subnet within the VPC (e.g., 10.100.0.0/24).
+
+Attach an Internet Gateway (IGW) to allow external communication.
+
+Configure Route Tables to direct traffic appropriately.
+
+2. Deploying Security Onion Instance
+
+Launch an EC2 instance with Security Onion.
+
+Assign two network interfaces:
+
+eth0: Used for packet sniffing (without a public IP assigned).
+
+eth1: Used for management (assigned a public IP for remote access).
+
+Configure Security Groups:
+
+Allow traffic from your personal IP for SSH (port 22).
+
+Open necessary ports for Security Onion tools (e.g., 5601 for Kibana).
+
+3. Configuring Host Files
+
+Add the Security Onion private IP to the local host file for easy identification.
+
+Ensure name resolution works correctly.
+
+4. Accessing Security Onion
+
+SSH into the Security Onion instance.
+
+Perform initial configuration as per Security Onion documentation.
+
+Enable network monitoring and set up detection rules.
+
+5. Deploying a Traffic Mirroring EC2 Instance
+
+Launch a Linux EC2 instance within the same VPC.
+
+Choose an instance type that supports traffic mirroring (e.g., t3.medium or m5.large).
+
+Assign a dedicated Security Group named Onion Sniffing, allowing:
+
+All inbound traffic from the VPC (10.100.0.0/24).
+
+External traffic as required.
+
+6. Configuring Traffic Mirroring
+
+Create a Mirror Filter:
+
+Allow all traffic (0.0.0.0/0).
+
+Add a second rule to allow traffic from the VPC (10.100.0.0/24).
+
+Create a Traffic Mirror Target:
+
+Assign the Security Onion sniffing interface (eth0) as the target.
+
+Create a Traffic Mirror Session:
+
+Mirror Source: The Linux EC2 instance.
+
+Mirror Target: The Security Onion sniffing interface.
+
+Mirror Filter: Apply the previously created filter.
+
+7. Verifying Traffic Mirroring
+
+Run a TCP dump on Security Onion:
+
+sudo tcpdump -i eth0 host <Linux EC2 Private IP>
+
+Generate test traffic on the Linux EC2 instance.
+
+Confirm that packets are appearing in Security Onion.
+
+8. Setting Up Windows Logging and HIDS
+
+Deploy a Windows EC2 instance in the same VPC.
+
+Assign a new Security Group with necessary access.
+
+Install Sysmon for detailed event logging.
+
+Install Elastic Agent and Kibana to forward logs to Security Onion.
+
+9. Configuring Firewall Logging on Security Onion
+
+Enable firewall logging to capture all inbound and outbound connections.
+
+Collect logs for forensic analysis.
+
+10. Integrating AWS Cloud Logs with Security Onion
+
+1. Create an IAM User
+
+Assign it to a group with the following permissions:
+
+SQS Full Access
+
+CloudWatch Full Access
+
+CloudTrail Full Access
+
+WAF Full Access
+
+EC2 Full Access (Not recommended for production).
+
+Save the Access Key and Secret Key for later use.
+
+2. Configure AWS CloudTrail
+
+Create CloudTrail 1 and point it to an existing S3 bucket.
+
+Create CloudTrail 2 and point it to the same or another S3 bucket.
+
+Retrieve the ARN of the S3 bucket.
+
+Add the ARN to an SQS queue with the appropriate JSON policy.
+
+Modify S3 event notifications to push logs to the SQS queue.
+
+3. Create SQS Queue and Enable SNS
+
+Ensure that the SQS queue is properly configured.
+
+Enable SNS notifications for log alerts.
+
+Verify that the JSON policy is correctly applied.
+
+4. Elastic Agent Integration with AWS
+
+Navigate to Security Onion.
+
+Go to AWS CloudTrail Integration.
+
+Add the IAM details and SQS queue information.
+
+Confirm logs are appearing in Security Onion.
+
+11. Testing and Searching with Event ID
+
+Use Security Onion’s Hunt tab to search for logs.
+
+Filter based on event IDs and source IPs.
+
+Correlate findings with firewall logs and system logs for deeper analysis.
