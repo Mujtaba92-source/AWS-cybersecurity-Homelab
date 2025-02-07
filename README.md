@@ -43,19 +43,21 @@ Security Onion Deployment:
 Launch a Linux-based EC2 instance and install Security Onion.
 Configure Security Onion to monitor specific network interfaces and capture traffic within the VPC.
 Set up tools such as Kibana and Elasticsearch for log visualization and analysis.
-Validation and Testing:
 
-Simulate malicious network activities using tools like Kali Linux or Metasploit.
-Verify that Security Onion generates alerts and logs accurately.
-Documentation and Results:
+Validation and Testing: Run TCP DUMP to simulate the Traffic mirroring on the onion , Setup AWS Cloud trail, SQS to send logs to the Elastic agent.
 
-Document the deployment process, configurations, and lessons learned.
-Include screenshots of logs, alerts, and dashboards from Security Onion.
+Docs:-
+https://www.elastic.co/guide/en/observability/current/monitor-aws-elastic-agent.html
+
+
 Key Technologies Used:
 
 AWS Services: EC2, VPC, Security Groups, Subnets, Internet Gateway.
+
 Security Onion: Tools like Suricata, Zeek (formerly Bro), Kibana, Elasticsearch.
+
 Networking: CIDR, routing tables, and firewall rules.
+
 Outcome:
 This project provides a foundational understanding of how to deploy and manage a network monitoring solution in the cloud. It showcases the use of AWS and Security Onion to simulate a cloud-based SOC environment, preparing you for real-world cybersecurity monitoring tasks.
 
